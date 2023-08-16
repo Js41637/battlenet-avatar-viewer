@@ -19,8 +19,41 @@
       background-color: #4d4d4d;
     }
 
-    .avatar {
+    .avatar-search {
+      max-width: 425px;
+    }
+
+    .card-avatar,
+    .card-franchise {
       width: 200px;
+      font-size: 16px;
+    }
+
+    .card-franchise img {
+      width: fit-content;
+      max-width: 64px;
+    }
+
+    .card-avatar img {
+      width: fit-content;
+      max-width: 100px;
+    }
+
+    @media (max-width: 768px) {
+      .card-avatar,
+      .card-franchise {
+        width: 48%;
+        font-size: 14px;
+      }
+
+      .card-avatar img,
+      .card-franchise img {
+        max-width: 64px;
+      }
+
+      .avatar-search {
+        max-width: 300px;
+      }
     }
   </style>
 </head>
@@ -50,13 +83,12 @@
 
         <div class="d-flex flex-wrap gap-2 user-select-none justify-content-center">
           <div
-            class="card align-items-center text-center p-2 card-clickable"
-            style="width: 200px;"
+            class="card card-franchise align-items-center text-center p-2 card-clickable"
             ng-repeat="item in $vm.franchises"
             ng-click="$vm.selectFranchise(item)"
             ng-class="{ 'bg-primary': item.selected }">
-            <img ng-src="{{item.imageUrl}}" class="card-img-top" style="width: fit-content; max-width: 64px;">
-            <div class="fs-6 mt-1 lh-1 text-white">{{item.title}}</div>
+            <img ng-src="{{item.imageUrl}}" class="card-img-top">
+            <div class="mt-1 lh-1 text-white">{{item.title}}</div>
           </div>
         </div>
       </div>
@@ -64,14 +96,12 @@
       <div ng-hide="$vm.loading">
         <h2>Avatars ({{$vm.filteredAvatars.length}})</h2>
 
-        <input type="text" class="form-control mb-3 w-25 mx-auto" placeholder="Search" ng-model="$vm.searchText" ng-change="$vm.regenFilteredAvatars()">
+        <input type="text" class="form-control mb-3 mx-auto avatar-search" placeholder="Search for an avatar..." ng-model="$vm.searchText" ng-change="$vm.regenFilteredAvatars()">
         <div class="d-flex flex-wrap gap-2 user-select-none justify-content-center">
-          <a ng-repeat="item in $vm.filteredAvatars" ng-href="{{item.imageUrl}}" target="_blank" class="text-decoration-none">
-            <div class="card avatar align-items-center text-center p-2 card-clickable">
-              <img ng-src="{{item.imageUrl}}" class="card-img-top" style="width: fit-content; max-width: 100px;">
-              <div class="fs-6 mt-1 lh-1 text-white" ng-show="item.title">{{item.title}}</div>
-              <div class="text-muted mt-1" ng-hide="item.title">No Name?</div>
-            </div>
+          <a class="card card-avatar align-items-center text-center p-2 card-clickable text-decoration-none" ng-repeat="item in $vm.filteredAvatars" ng-href="{{item.imageUrl}}" target="_blank">
+            <img ng-src="{{item.imageUrl}}" class="card-img-top" loading="lazy">
+            <div class="mt-1 lh-1 text-white" ng-show="item.title">{{item.title}}</div>
+            <div class="text-muted mt-1" ng-hide="item.title">No Name?</div>
           </a>
 
           <div class="alert alert-info w-25" ng-if="$vm.filteredAvatars.length === 0 && !$vm.loading">No avatars found.</div>
