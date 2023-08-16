@@ -13,16 +13,27 @@ app.config(function($sceProvider, $compileProvider, $locationProvider) {
   $compileProvider.debugInfoEnabled(false) // more perf
 })
 
-app.controller('RootCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
+app.controller('RootCtrl', ['$scope', '$http', '$location', '$filter', function($scope, $http, $location, $filter) {
   const vm = this
   this.loading = true
   this.loadError = false
+  this.searchText = null
   this.selectedFranchises = $location.search().franchises?.split(',').filter(Boolean) || []
   this.filteredAvatars = []
 
   this.regenFilteredAvatars = () => {
     vm.franchises.forEach(f => f.selected = vm.selectedFranchises.includes(f.id))
-    vm.filteredAvatars = vm.avatars.filter(vm.canShowAvatar)
+    vm.filteredAvatars = vm.avatars.filter(avatar => {
+      if (!vm.canShowAvatar(avatar)) {
+        return false
+      }
+
+      if (vm.searchText) {
+        return $filter('filter')([avatar], { title: this.searchText }).length > 0
+      }
+
+      return true
+    })
   }
 
   vm.selectFranchise = (franchise) => {

@@ -35,8 +35,6 @@
       </div>
     </nav>
 
-
-
     <div class="container-fluid text-center" style="max-width: 1900px;">
 
       <div class="alert alert-danger" ng-show="$vm.loadError && !$vm.loading">
@@ -66,6 +64,7 @@
       <div ng-hide="$vm.loading">
         <h2>Avatars ({{$vm.filteredAvatars.length}})</h2>
 
+        <input type="text" class="form-control mb-3 w-25 mx-auto" placeholder="Search" ng-model="$vm.searchText" ng-change="$vm.regenFilteredAvatars()">
         <div class="d-flex flex-wrap gap-2 user-select-none justify-content-center">
           <a ng-repeat="item in $vm.filteredAvatars" ng-href="{{item.imageUrl}}" target="_blank" class="text-decoration-none">
             <div class="card avatar align-items-center text-center p-2 card-clickable">
